@@ -1,214 +1,482 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
+  <meta charset="UTF-8">
 
-    <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+  <meta
+    name="theme-color"
+    content="#ffffff"
+  >
 
-    <title>일본 쇼핑 리스트</title>
+  <title>일본 쇼핑리스트</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+  <meta
+    name="description"
+    content="일본 여행용 쇼핑리스트. 상품 검색, 엔화·한화 예상가격, 옵션 선택, 쇼핑리스트 관리 기능을 제공합니다."
+  >
 
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
 
-
 <body>
+  <div class="app-shell">
 
-    <header class="main-header">
+    <!-- =========================
+         상단 헤더
+    ========================== -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-title-area">
+          <p class="header-eyebrow">
+            JAPAN SHOPPING LIST
+          </p>
 
-        <h1>
-            🇯🇵 일본 쇼핑 리스트
-        </h1>
+          <h1>
+            일본 쇼핑리스트
+          </h1>
 
-        <p class="header-description">
-            사고 싶은 상품을 선택하고 일본에서 구매 완료를 체크하세요.
-        </p>
-
-
-        <div class="summary-box">
-
-            <div class="summary-item">
-
-                <span>
-                    선택 상품
-                </span>
-
-                <strong>
-                    <span id="selectedCount">0</span>개
-                </strong>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <span>
-                    구매 완료
-                </span>
-
-                <strong>
-                    <span id="completedCount">0</span>
-                    /
-                    <span id="totalCount">0</span>
-                </strong>
-
-            </div>
-
-
-            <div class="summary-item">
-
-                <span>
-                    총 구매 수량
-                </span>
-
-                <strong>
-                    <span id="totalQuantity">0</span>개
-                </strong>
-
-            </div>
-
+          <p class="header-description">
+            일본 여행 중 살 상품을 번호·상품명으로 검색하고
+            쇼핑리스트에 추가할 수 있습니다.
+          </p>
         </div>
 
+        <div
+          id="priceConfigInfo"
+          class="price-config-info"
+        >
+          한화 환산 기준을 불러오는 중...
+        </div>
+      </div>
     </header>
 
 
-    <main>
+    <!-- =========================
+         메인 콘텐츠
+    ========================== -->
+    <main class="main-content">
 
-        <section class="section info-notice">
+      <!-- 공통 안내 -->
+      <section
+        id="noticeArea"
+        class="notice-area"
+        aria-label="가격 및 의약품 안내"
+      ></section>
 
-            <p>
-                ⭐ 화장품 평점은 @cosme 7점 만점 기준이며
-                확인 시점 이후 변경될 수 있습니다.
+
+      <!-- =========================
+           검색 / 필터
+      ========================== -->
+      <section
+        class="control-panel"
+        aria-labelledby="searchSectionTitle"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">
+              SEARCH
             </p>
 
-            <p>
-                💊 의약품 정보는 일본 제품의 공식 효능·용법을
-                쇼핑 확인용으로 요약한 것입니다.
-                실제 복용·사용 전 포장과 첨부문서를 확인하세요.
+            <h2 id="searchSectionTitle">
+              상품 찾기
+            </h2>
+          </div>
+
+          <div
+            id="resultCount"
+            class="result-count"
+          >
+            0개 상품
+          </div>
+        </div>
+
+
+        <!-- 검색 -->
+        <div class="search-box">
+          <label
+            for="searchInput"
+            class="field-label"
+          >
+            상품 검색
+          </label>
+
+          <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            placeholder="번호 또는 상품명 검색 예) 42, #042, 메라노CC"
+            autocomplete="off"
+          >
+
+          <p class="field-help">
+            번호 검색은
+            <strong>42</strong>,
+            <strong>042</strong>,
+            <strong>#42</strong>,
+            <strong>#042</strong>
+            모두 사용할 수 있습니다.
+          </p>
+        </div>
+
+
+        <!-- 필터 -->
+        <div class="filter-grid">
+
+          <label class="filter-field">
+            <span>
+              카테고리
+            </span>
+
+            <select
+              id="categoryFilter"
+              class="filter-select"
+            >
+              <option value="all">
+                전체 카테고리
+              </option>
+            </select>
+          </label>
+
+
+          <label class="filter-field">
+            <span>
+              판매 상태
+            </span>
+
+            <select
+              id="statusFilter"
+              class="filter-select"
+            >
+              <option value="all">
+                전체 상태
+              </option>
+            </select>
+          </label>
+
+
+          <label class="filter-field">
+            <span>
+              판매처 구분
+            </span>
+
+            <select
+              id="storeFilter"
+              class="filter-select"
+            >
+              <option value="all">
+                전체 판매처
+              </option>
+            </select>
+          </label>
+
+
+          <label class="filter-field">
+            <span>
+              정렬
+            </span>
+
+            <select
+              id="sortSelect"
+              class="filter-select"
+            >
+              <option value="number-asc">
+                번호 낮은순
+              </option>
+
+              <option value="number-desc">
+                번호 높은순
+              </option>
+
+              <option value="name-asc">
+                이름 가나다순
+              </option>
+
+              <option value="name-desc">
+                이름 역순
+              </option>
+
+              <option value="price-asc">
+                가격 낮은순
+              </option>
+
+              <option value="price-desc">
+                가격 높은순
+              </option>
+            </select>
+          </label>
+
+        </div>
+      </section>
+
+
+      <!-- =========================
+           빠른 추가
+      ========================== -->
+      <section
+        class="quick-add-panel"
+        aria-labelledby="quickAddTitle"
+      >
+        <div class="quick-add-header">
+          <div>
+            <p class="section-kicker">
+              QUICK ADD
             </p>
 
-        </section>
+            <h2 id="quickAddTitle">
+              번호로 빠르게 추가
+            </h2>
+          </div>
+        </div>
 
 
-        <section class="section filter-section">
+        <div class="quick-add-form">
 
-            <div class="search-box">
+          <label class="quick-add-field quick-add-number-field">
+            <span>
+              상품 번호
+            </span>
 
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="상품명, 성분, 효능, 일본어 검색"
-                    autocomplete="off"
-                >
-
-            </div>
-
-
-            <div class="filter-block">
-
-                <h3>
-                    카테고리
-                </h3>
-
-                <div
-                    id="categoryFilters"
-                    class="filter-buttons"
-                >
-                </div>
-
-            </div>
-
-
-            <div class="filter-block">
-
-                <h3>
-                    구매처
-                </h3>
-
-                <div
-                    id="storeFilters"
-                    class="filter-buttons"
-                >
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <section class="section">
-
-            <div class="section-title-row">
-
-                <h2>
-                    상품 목록
-                </h2>
-
-                <span id="productResultCount">
-                    0개
-                </span>
-
-            </div>
-
-
-            <p
-                id="noProductMessage"
-                class="empty-message"
+            <input
+              id="quickAddNumber"
+              type="text"
+              inputmode="numeric"
+              placeholder="#042"
+              autocomplete="off"
             >
-                조건에 맞는 상품이 없습니다.
+          </label>
+
+
+          <label class="quick-add-field quick-add-quantity-field">
+            <span>
+              수량
+            </span>
+
+            <input
+              id="quickAddQuantity"
+              type="number"
+              min="1"
+              max="999"
+              value="1"
+              inputmode="numeric"
+            >
+          </label>
+
+
+          <button
+            id="quickAddButton"
+            class="quick-add-button"
+            type="button"
+          >
+            추가
+          </button>
+
+        </div>
+
+
+        <div
+          id="quickAddMessage"
+          class="quick-add-message"
+          aria-live="polite"
+        ></div>
+
+        <p class="quick-add-help">
+          옵션이 여러 개인 상품은 기본 옵션으로 추가됩니다.
+          다른 옵션을 선택하려면 상품 카드에서 직접 추가하세요.
+        </p>
+      </section>
+
+
+      <!-- =========================
+           상품 목록
+      ========================== -->
+      <section
+        class="products-section"
+        aria-labelledby="productsTitle"
+      >
+        <div class="section-heading products-heading">
+          <div>
+            <p class="section-kicker">
+              PRODUCTS
             </p>
 
-
-            <div
-                id="productList"
-                class="product-list"
-            >
-            </div>
-
-        </section>
+            <h2 id="productsTitle">
+              전체 상품
+            </h2>
+          </div>
+        </div>
 
 
-        <section class="section">
-
-            <div class="section-title-row">
-
-                <h2>
-                    🛒 내 쇼핑리스트
-                </h2>
-
-            </div>
-
-
-            <p
-                id="emptyMessage"
-                class="empty-message"
-            >
-                아직 선택한 상품이 없습니다.
-            </p>
-
-
-            <div
-                id="shoppingList"
-                class="shopping-list"
-            >
-            </div>
-
-        </section>
+        <div
+          id="productList"
+          class="product-list"
+          aria-live="polite"
+        >
+          <div class="loading-box">
+            상품 데이터를 불러오는 중...
+          </div>
+        </div>
+      </section>
 
     </main>
 
 
-    <script src="products.js"></script>
-    <script src="app.js"></script>
+    <!-- =========================
+         쇼핑리스트 패널
+    ========================== -->
+    <aside
+      id="cartPanel"
+      class="cart-panel"
+      aria-hidden="true"
+      aria-labelledby="cartPanelTitle"
+    >
+      <div class="cart-panel-inner">
 
+        <div class="cart-header">
+          <div>
+            <p class="section-kicker">
+              MY LIST
+            </p>
+
+            <h2 id="cartPanelTitle">
+              쇼핑리스트
+            </h2>
+          </div>
+
+
+          <button
+            id="cartCloseButton"
+            class="cart-close-button"
+            type="button"
+            aria-label="쇼핑리스트 닫기"
+          >
+            ×
+          </button>
+        </div>
+
+
+        <div class="cart-summary">
+          <div class="cart-summary-count">
+            선택 수량
+
+            <strong id="cartCount">
+              0
+            </strong>
+          </div>
+
+          <div
+            id="cartTotal"
+            class="cart-total"
+          >
+            예상 합계 -
+          </div>
+        </div>
+
+
+        <div class="cart-toolbar">
+
+          <button
+            id="clearPurchasedButton"
+            class="cart-toolbar-button"
+            type="button"
+          >
+            구매완료 정리
+          </button>
+
+          <button
+            id="emptyCartButton"
+            class="cart-toolbar-button danger"
+            type="button"
+          >
+            전체 비우기
+          </button>
+
+        </div>
+
+
+        <div
+          id="cartItems"
+          class="cart-items"
+        >
+          <div class="cart-empty">
+            <strong>
+              쇼핑리스트가 비어 있습니다.
+            </strong>
+
+            <p>
+              원하는 상품을 추가해 주세요.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+
+    <!-- =========================
+         모바일/고정 쇼핑리스트 버튼
+    ========================== -->
+    <button
+      id="cartOpenButton"
+      class="floating-cart-button"
+      type="button"
+      aria-controls="cartPanel"
+      aria-expanded="false"
+      aria-label="쇼핑리스트 열기, 현재 0개"
+    >
+      <span class="floating-cart-icon">
+        🛒
+      </span>
+
+      <span class="floating-cart-text">
+        쇼핑리스트
+      </span>
+
+      <span
+        class="floating-cart-count"
+        data-cart-button-count
+      >
+        0
+      </span>
+    </button>
+
+
+    <!-- 배경 오버레이 -->
+    <div
+      id="cartBackdrop"
+      class="cart-backdrop"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- =========================
+         푸터
+    ========================== -->
+    <footer class="site-footer">
+      <p>
+        일본 현지 가격·재고·상품 구성은 매장과 시기에 따라 달라질 수 있습니다.
+      </p>
+
+      <p>
+        의약품은 실제 구입한 제품의 일본어 포장과 첨부문서를 우선 확인하세요.
+      </p>
+    </footer>
+
+  </div>
+
+
+  <!--
+    중요:
+    products.js를 반드시 app.js보다 먼저 불러옵니다.
+  -->
+  <script src="products.js"></script>
+  <script src="app.js"></script>
 </body>
-
 </html>
